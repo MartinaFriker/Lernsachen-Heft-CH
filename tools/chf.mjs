@@ -129,6 +129,12 @@ export const patches = [
     count: 1,
   },
   {
+    what: "shop: 'Einzel' column without 'Fr.' so '2 x 1.00' fits on one line (the sum column shows Fr.)",
+    find: re(String.raw`\$\{(@)\.n\} x \$\{(@)\((@)\((@)\.price,(@)\.level\)\)\}`),
+    to: "${$1.n} x ${$2($3($4.price,$5.level).replace(/ Fr\\.$/,``))}",
+    count: 2,
+  },
+  {
     what: "shop: always draw coins and notes (stored pictures are euro pictograms)",
     find: re(String.raw`let (@)=(@)\.src\(\2\.s\.money\[String\((@)\)\]\)`),
     to: "let $1=null",
