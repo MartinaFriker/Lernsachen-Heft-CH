@@ -4,7 +4,8 @@
 // The app code is minified and exists twice in the file (main app + the runtime that
 // goes into HTML exports, built with different variable names), so every patch says how
 // often it must match. Identifiers are matched with @ (any minified name), never by name.
-// Display: "3.50 Fr." / "45 Rp."; speech: "3 Franken 50" / "45 Rappen".
+// Display: "3.50 Fr." / "45 Rp."; speech: "3 Franken 50" / "45 Rappn" (spelled so the German voice
+// says "Rappen" and not "Reppen").
 // All prices are rounded to 5 Rappen, since there are no 1- and 2-Rappen coins.
 
 const ID = String.raw`[\w$]+`;
@@ -59,7 +60,7 @@ export const patches = [
   {
     what: "shop: spoken amounts",
     find: "return t?n?`${t} Euro ${n}`:`${t} Euro`:`${n} Cent`}",
-    to: "return t?n?`${t} Franken ${n}`:`${t} Franken`:`${n} Rappen`}",
+    to: "return t?n?`${t} Franken ${n}`:`${t} Franken`:`${n} Rappn`}",
     count: 2,
   },
   {
@@ -419,7 +420,7 @@ export const patches = [
   {
     what: "machine: spoken amounts",
     find: "e=>e<100?`${e} Cent`:`${Math.floor(e/100)} Euro${e%100?` ${e%100}`:``}`",
-    to: "e=>e<100?`${e} Rappen`:`${Math.floor(e/100)} Franken${e%100?` ${e%100}`:``}`",
+    to: "e=>e<100?`${e} Rappn`:`${Math.floor(e/100)} Franken${e%100?` ${e%100}`:``}`",
     count: 2,
   },
   {
@@ -475,7 +476,7 @@ export const patches = [
   {
     what: "budget: spoken amounts",
     find: re(String.raw`\$\{(@)\?\`\$\{\1\} Euro\$\{(@)\?\` \$\{\2\}\`:\`\`\}\`:\`\$\{\2\} Cent\`\}`),
-    to: "${$1?`${$1} Franken${$2?` ${$2}`:``}`:`${$2} Rappen`}",
+    to: "${$1?`${$1} Franken${$2?` ${$2}`:``}`:`${$2} Rappn`}",
     count: 2,
   },
   {
