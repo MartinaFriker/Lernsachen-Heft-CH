@@ -1,6 +1,6 @@
 # Lernsachen-Heft CH
 
-**App: <https://martinafriker.github.io/lernsachen-heft-CH/>**
+**App: <https://martinafriker.github.io/Lernsachen-Heft-CH/>**
 
 Schweizer Version des [Lernsachen-Heft](https://lernsachen.blog) von Lernsachen.blog – installierbar
 auf iPhone, iPad und Android und nach dem ersten Öffnen auch ohne Internet nutzbar.
