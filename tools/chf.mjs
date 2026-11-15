@@ -136,6 +136,12 @@ export const patches = [
     count: 2,
   },
   {
+    what: "shop: stacked equal coins/notes overlap only slightly, so every number stays visible",
+    find: re(String.raw`(@)=(@)\?(@):78\*(@),(@)=\3\*\.2,(@)=\1\*\.2,`),
+    to: "$1=$2?$3:78*$4,$5=$3*($2?.72:.82),$6=$1*($2?.06:.1),",
+    count: 2,
+  },
+  {
     what: "shop: always draw coins and notes (stored pictures are euro pictograms)",
     find: re(String.raw`let (@)=(@)\.src\(\2\.s\.money\[String\((@)\)\]\)`),
     to: "let $1=null",
