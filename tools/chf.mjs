@@ -509,6 +509,44 @@ export const patches = [
     count: 2,
   },
 
+  // ---------- Swiss words, whole app ----------
+  {
+    what: "words: Glace instead of Eis am Stiel (kiosk basket)",
+    find: "{name:`Eis am Stiel`,price:150,arasaac:3348,g:`n`,pl:`Eis am Stiel`}",
+    to: "{name:`Glace`,price:150,arasaac:3348,g:`f`,pl:`Glace`}",
+    count: 1,
+  },
+  {
+    what: "words: Peperoni instead of Paprika (market basket, grammar)",
+    find: "{name:`Paprika`,price:89,arasaac:2839,g:`f`,pl:`Paprika`}",
+    to: "{name:`Peperoni`,price:89,arasaac:2839,g:`f`,pl:`Peperoni`}",
+    count: 1,
+  },
+  {
+    what: "words: Peperoni instead of Paprika (receipt, picture, Anlaut word)",
+    find: "Paprika",
+    to: "Peperoni",
+    count: 4,
+  },
+  {
+    what: "words: Trotti instead of Roller (toy shop basket, grammar)",
+    find: "{name:`Roller`,price:6999,arasaac:2508,g:`m`,pl:`Roller`}",
+    to: "{name:`Trotti`,price:6999,arasaac:2508,g:`n`,pl:`Trottis`}",
+    count: 1,
+  },
+  {
+    what: "words: Trotti instead of Roller (syllable train vehicle, help, example list)",
+    find: /(?<![\p{L}])Roller(?![\p{L}])/gu,
+    to: "Trotti",
+    count: 4,
+  },
+  {
+    what: "words: Farbstift instead of Buntstift (drawing tool, word board, shop, help)",
+    find: "Buntstift",
+    to: "Farbstift",
+    count: 16,
+  },
+
   {
     what: "budget/machine: empty amount fields show 0.00",
     find: "placeholder:`0,00`",
@@ -610,3 +648,26 @@ export const cleanRegions = [
   ["money sheet", "var Kq={formats:", "function pFe(){"],
   ["money sheet dialog", "var k2e=`lernheft-money-v1`", "function N2e(){"],
 ];
+
+// ß -> ss in all words of the app (Swiss spelling). Left alone on purpose:
+// - hyphenation patterns (`patterns:{3:`…1ßa…`}`), which describe German words with ß
+// - letter classes in regular expressions like [a-zäöüß], so typed ß still works
+// - the single letter `ß` as a key or as a case in the code (it is not next to a letter)
+// - the character list used to subset fonts for exports
+export function swissSz(html) {
+  const keep = [
+    /patterns:\{[^}]*\}/g,
+    /\[[\^A-Za-zÄÖÜäöüßÀ-ɏ\\s\-‐]*ß[A-Za-zÄÖÜäöüßÀ-ɏ\\s\-‐]*\]/g,
+    /AaÄäÖöÜüß0123456789/g,
+  ];
+  const spans = [];
+  for (const rx of keep) for (const m of html.matchAll(rx)) spans.push([m.index, m.index + m[0].length]);
+  spans.sort((a, b) => a[0] - b[0]);
+  const inKept = (i) => spans.some(([a, b]) => i >= a && i < b);
+  let n = 0;
+  // The spelling list named after ß now holds words with ss.
+  html = html.replaceAll("`Wörter mit ß, tz, ck`", "`Wörter mit ss, tz, ck`");
+  const out = html.replace(/(?<=\p{L})ß|ß(?=\p{L})/gu, (m, i) => (inKept(i) ? m : (n++, "ss")));
+  if (n < 400) throw new Error(`ß patch: only ${n} replacements, expected about 475`);
+  return { html: out, replaced: n, kept: (out.match(/ß/g) ?? []).length };
+}

@@ -32,7 +32,10 @@ Skript `tools/build.mjs` (mit `tools/chf.mjs`) beim Erstellen von `index.html`:
   - die Lösungskontrolle versteht „Fr.“, „CHF“, „Rp.“ und den Tausender-Strich
 - **Punkt statt Komma** auf dem Taschenrechner und der Eingabe beim Kassenzettel.
 - **Schweizer Wörter:** „Weggli“ statt „Semmel“, „Auf Wiedersehen“ statt „Servus“, „Noten“ statt
-  „Scheine“.
+  „Scheine“; in der ganzen App „Glace“ statt „Eis am Stiel“, „Peperoni“ statt „Paprika“,
+  „Farbstift“ statt „Buntstift“ und „Trotti“ statt „Roller“.
+- **Schweizer Rechtschreibung:** in allen Texten „ss“ statt „ß“. Unverändert bleiben die
+  Silbentrennmuster und die Programmteile, die ein eingetipptes „ß“ erkennen.
 - Kleine Anpassungen am Layout, damit die längeren Franken-Beträge Platz haben.
 
 ## Enthaltene Teile anderer Urheber

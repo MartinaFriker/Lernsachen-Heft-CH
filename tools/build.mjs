@@ -7,7 +7,7 @@ import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { applyChf } from "./chf.mjs";
+import { applyChf, swissSz } from "./chf.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const src = process.argv[2] ?? join(root, "upstream", "Lernsachen-Heft.html");
@@ -64,6 +64,11 @@ replaceOnce(/<meta name="apple-mobile-web-app-title" content="Lernsachen-Heft" \
 
 // 3. Swiss francs instead of euros in the calculator and checkout exercises.
 html = applyChf(html);
+
+// 4. Swiss spelling: ß -> ss in words.
+const sz = swissSz(html);
+html = sz.html;
+console.log(`ß -> ss: ${sz.replaced} replaced, ${sz.kept} kept (patterns, letter classes, single key)`);
 
 writeFileSync(join(root, "index.html"), html);
 
